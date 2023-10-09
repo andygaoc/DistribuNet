@@ -1,31 +1,16 @@
 package config
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
-
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-var db *sql.DB
-
-func InitDB() {
-	var err error
-	db, err = sql.Open("mysql", "root:password@tcp(localhost:3306)/mydatabase")
+func GetDB() (*gorm.DB, error) {
+	dsn := "root:123123@tcp(localhost:3306)/affiliate"
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	err = db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println("Connected to database")
-}
-
-func CloseDB() {
-	db.Close()
-	fmt.Println("Database connection closed")
+	return db, nil
 }

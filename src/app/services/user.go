@@ -10,7 +10,6 @@ func CreateUser(user *models.User) error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	result := db.Create(&user)
 	if result.Error != nil {
@@ -25,7 +24,6 @@ func GetUserByID(id string) (*models.User, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
 
 	var user models.User
 	result := db.First(&user, id)

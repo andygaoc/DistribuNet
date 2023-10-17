@@ -1,0 +1,16 @@
+{
+  "Server": {
+    "Host": "127.0.0.1",
+    "Port": "1234"
+  },
+  "DbInfo":{
+    "Host":"127.0.0.1",
+    "Port":"3306",
+    "Database":"affiliate",
+    "Username":"root",
+    "Password":"123123",
+    "DbMaxIdleConns": 20,
+    "DbMaxOpenConns": 50
+  },
+  "LogDir":""
+}

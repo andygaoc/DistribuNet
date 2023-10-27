@@ -1,0 +1,236 @@
+# 用户认证和授权相关API
+paths:
+  /api/auth/register:
+    post:
+      summary: 用户注册
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: 用户注册成功
+        400:
+          description: 请求参数错误
+
+  /api/auth/login:
+    post:
+      summary: 用户登录
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: 用户登录成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        401:
+          description: 用户名或密码错误
+
+  /api/auth/refresh_token:
+    post:
+      summary: 刷新令牌
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        200:
+          description: 令牌刷新成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        401:
+          description: 无效的刷新令牌
+
+  # 角色和权限管理相关API
+  /api/roles:
+    get:
+      summary: 获取角色列表
+      responses:
+        200:
+          description: 成功获取角色列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+    post:
+      summary: 创建角色
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        201:
+          description: 角色创建成功
+        400:
+          description: 请求参数错误
+
+  /api/roles/{role_id}:
+    put:
+      summary: 编辑角色
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        200:
+          description: 角色编辑成功
+        400:
+          description: 请求参数错误
+    delete:
+      summary: 删除角色
+      parameters:
+        - name: role_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        204:
+          description: 角色删除成功
+        404:
+          description: 角色不存在
+# 权限管理相关API
+paths:
+  /api/permissions:
+    get:
+      summary: 获取权限列表
+      responses:
+        200:
+          description: 成功获取权限列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+
+  # 路由和中间件相关API
+  /api/routes:
+    get:
+      summary: 获取路由列表
+      responses:
+        200:
+          description: 成功获取路由列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                    permissions:
+                      type: array
+                      items:
+                        type: string
+
+  # 日志和审计相关API
+  /api/logs:
+    get:
+      summary: 查询操作日志
+      parameters:
+        - name: start_time
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: end_time
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        200:
+          description: 成功查询操作日志
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    user:
+                      type: string
+                    action:
+                      type: string
+                    timestamp:
+                      type: string
+                    description:
+                      type: string
+
+  # 前端界面相关API
+  /api/ui/roles:
+    get:
+      summary: 获取角色管理界面
+      responses:
+        200:
+          description: 成功获取角色管理界面的HTML内容
+          content:
+            text/html:
+              schema:
+                type: string
+

@@ -1,0 +1,42 @@
+# 点击数据上报
+paths:
+  /api/click-report:
+    post:
+      summary: 点击数据上报
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                click_type:
+                  type: string
+                tracking_id:
+                  type: integer
+                payment_id:
+                  type: integer
+                payment_method:
+                  type: string
+                payment_info:
+                  type: object
+              example:
+                user_id: 123
+                click_type: "invitation"
+                tracking_id: 456
+                payment_id: 789
+                payment_method: "credit_card"
+                payment_info:
+                  card_number: 1234567890
+                  expiry_date: 12/23
+                  cvv: 123
+      responses:
+        200:
+          description: 点击数据上报成功
+        400:
+          description: 请求参数错误
+
+# 其他API定义...
+

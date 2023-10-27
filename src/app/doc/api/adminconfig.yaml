@@ -1,0 +1,108 @@
+# 配置管理相关API
+paths:
+  /api/configurations:
+    get:
+      summary: 获取所有配置项
+      responses:
+        200:
+          description: 成功获取配置项列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+
+  /api/configurations/{key}:
+    get:
+      summary: 获取单个配置项
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 成功获取配置项
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+        404:
+          description: 配置项不存在
+
+    put:
+      summary: 更新配置项
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: string
+      responses:
+        200:
+          description: 配置项更新成功
+        400:
+          description: 请求参数错误
+        404:
+          description: 配置项不存在
+
+    delete:
+      summary: 删除配置项
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: 配置项删除成功
+        404:
+          description: 配置项不存在
+
+  /api/configurations/batch:
+    post:
+      summary: 批量更新配置项
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                configurations:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+      responses:
+        200:
+          description: 配置项批量更新成功
+        400:
+          description: 请求参数错误
+

@@ -1,0 +1,229 @@
+# 客户端上报邀请码
+paths:
+  /api/commission-hub/invitation-code:
+    post:
+      summary: 客户端上报邀请码
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                invitation_code:
+                  type: string
+              example:
+                invitation_code: ABC123
+      responses:
+        200:
+          description: 邀请码上报成功
+        400:
+          description: 请求参数错误
+
+# 返佣趋势图
+paths:
+  /api/commission-hub/commission/trend:
+    get:
+      summary: 获取返佣趋势图数据
+      responses:
+        200:
+          description: 成功获取返佣趋势图数据
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        date:
+                          type: string
+                          format: date
+                        amount:
+                          type: number
+                example:
+                  data:
+                    - date: 2022-01-01
+                      amount: 1000.00
+                    - date: 2022-01-02
+                      amount: 1200.00
+
+# 返佣历史记录
+paths:
+  /api/commission-hub/commission/history:
+    get:
+      summary: 获取返佣历史记录
+      parameters:
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: 成功获取返佣历史记录
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date
+                    amount:
+                      type: number
+                  example:
+                    - date: 2022-01-01
+                      amount: 100.00
+                    - date: 2022-01-02
+                      amount: 120.00
+
+# 提现记录
+paths:
+  /api/commission-hub/withdrawals:
+    get:
+      summary: 获取提现记录
+      parameters:
+        - name: user_id
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: start_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: end_date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        200:
+          description: 成功获取提现记录
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    user_id:
+                      type: integer
+                    amount:
+                      type: number
+                    status:
+                      type: string
+                    date:
+                      type: string
+                      format: date
+                  example:
+                    - id: 1
+                      user_id: 123
+                      amount: 100.00
+                      status: "completed"
+                      date: 2022-01-01
+                    - id: 2
+                      user_id: 456
+                      amount: 120.00
+                      status: "pending"
+                      date: 2022-01-02
+
+# 提现接口
+paths:
+  /api/commission-hub/withdrawals:
+    post:
+      summary: 发起提现请求
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: integer
+                amount:
+                  type: number
+      responses:
+        200:
+          description: 提现请求已接收
+        400:
+          description: 请求参数错误
+
+# 账号余额查询接口
+paths:
+  /api/commission-hub/account/balance:
+    get:
+      summary: 查询账号余额
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: 成功查询账号余额
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: integer
+                  balance:
+                    type: number
+                example:
+                  user_id: 123
+                  balance: 1000.00
+
+# 邀请码查询接口
+paths:
+  /api/commission-hub/invitation-code/{code}:
+    get:
+      summary: 查询邀请码信息
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 成功查询邀请码信息
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                  user_id:
+                    type: integer
+                  status:
+                    type: string
+                example:
+                  code: ABC123
+                  user_id: 123
+                  status: "active"
+        404:
+          description: 邀请码不存在
+
+# 其他API定义...

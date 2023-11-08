@@ -234,3 +234,5 @@ paths:
               schema:
                 type: string
 
+
+swagger: "2.0"

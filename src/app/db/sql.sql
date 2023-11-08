@@ -7,8 +7,6 @@ CREATE TABLE InvitationCode (
                                 GenerateTime DATETIME COMMENT '生成时间',
                                 ExpiryTime DATETIME COMMENT '过期时间',
                                 Used BOOLEAN COMMENT '是否已使用',
-                                UsedByUserID INT COMMENT '使用者用户ID',
-                                UsedTime DATETIME COMMENT '使用时间',
                                 Status INT COMMENT '状态0.正常1时效 ',
                                 CreateTime DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 UpdateTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
@@ -18,17 +16,26 @@ CREATE TABLE WithdrawalRecord (
                                   ID INT PRIMARY KEY COMMENT '提现记录ID',
                                   UserID INT COMMENT '用户ID',
                                   Amount DECIMAL(10, 2) COMMENT '提现金额',
-                                  Status INT DEFAULT 0 COMMENT '状态（0.待处理，1.处理中，2.完成，3.失败，4.取消）',
+                                  Status INT DEFAULT 0 COMMENT '状态（0.待处理，1.审核通过，2.完成，3.失败，4.取消，5审核未通过）',
                                   CreateTime DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                   UpdateTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
 ) COMMENT='提现记录表';
 
+CREATE TABLE WithdrawalAuditRecord (
+                                       ID INT PRIMARY KEY COMMENT '提现审核记录ID',
+                                       WithdrawalID INT COMMENT '提现记录ID',
+                                       AuditorID INT COMMENT '审核人员ID',
+                                       AuditStatus INT DEFAULT 0 COMMENT '审核状态（0.待审核，1.审核通过，2.审核未通过）',
+                                       AuditComment VARCHAR(255) COMMENT '审核备注',
+                                       AuditTime DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '审核时间',
+                                       CreateTime DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                                       UpdateTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
+) COMMENT='提现审核记录表';
+
 CREATE TABLE User (
-                      ID INT PRIMARY KEY COMMENT '用户ID',
-                      Username VARCHAR(255) COMMENT '用户名',
-                      Password VARCHAR(255) COMMENT '密码',
-                      Email VARCHAR(255) COMMENT '电子邮件',
-                      Phone VARCHAR(255) COMMENT '手机号码',
+                      ID INT PRIMARY KEY COMMENT '自增ID',
+                      UserID INT PRIMARY KEY COMMENT '用户ID',
+                      Addr VARCHAR(255) COMMENT '用户名',
                       Status INT DEFAULT 0 COMMENT '状态0.正常 ',
                       CreateTime DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                       UpdateTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
@@ -40,7 +47,6 @@ CREATE TABLE CommissionRate (
                                 ID INT PRIMARY KEY COMMENT '返佣比例ID',
                                 ObjectType VARCHAR(255) COMMENT '返佣对象类型',
                                 ObjectID INT COMMENT '返佣对象ID',
-                                ProductID INT COMMENT '产品ID',
                                 Rate DECIMAL(5,2) COMMENT '返佣比例',
                                 CreateTime DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                 UpdateTime DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间'
